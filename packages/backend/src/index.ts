@@ -1,10 +1,9 @@
 import fastify from "fastify";
+import routes from "./routes/index.ts"
 
 const server = fastify();
 
-server.get("/ping", async (_request, _reply) => {
-  return "pong\n";
-});
+server.register(routes)
 
 const port:number = Number(process.env["BACKEND_PORT"]!);
 
