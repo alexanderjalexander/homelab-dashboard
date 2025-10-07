@@ -1,20 +1,31 @@
 import fastify from "fastify";
-import fastify_jwt from "@fastify/jwt"
-import fastify_leveldb from "@fastify/leveldb"
-import fastify_auth from "@fastify/auth"
+import { setupAuth } from "./auth-helpers.ts";
 import routes from "./routes/index.ts"
 
-const server = fastify();
+const server = fastify({});
 
-server.register(fastify_jwt, { secret: process.env["JWT_SECRET"]! });
-server.register(fastify_leveldb, { name: 'authdb', path: '.authdb', options: {} });
-server.register(fastify_auth);
+// Add JSON Content Parsing
+server.addContentTypeParser('application/json', { parseAs: 'string' }, function (_req, body, done) {
+  try {
+    const json = JSON.parse(body.toString())
+    done(null, json)
+  } catch (err) {
+    // @ts-ignore
+    err.statusCode = 400
+    // @ts-ignore
+    done(err, undefined)
+  }
+})
 
+// Plugins setup
+console.log("Setting up Authentication...");
+await setupAuth(server);
+console.log("Authentication set up!");
+
+// Register all other routes
 server.register(routes);
 
-const port:number = Number(process.env["BACKEND_PORT"]!);
-delete(process.env["ADMIN_USERNAME"]);
-delete(process.env["ADMIN_PASSWORD"]);
+const port: number = Number(process.env["BACKEND_PORT"]!);
 
 server.listen({ port: port }, (err, address) => {
   if (err) {

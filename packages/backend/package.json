@@ -13,9 +13,11 @@
   },
   "dependencies": {
     "@fastify/auth": "^5.0.3",
+    "@fastify/cookie": "^11.0.2",
     "@fastify/jwt": "^10.0.0",
     "@fastify/leveldb": "^6.1.0",
-    "bcrypt": "^6.0.0",
+    "@types/bcrypt": "^6.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "fastify": "^5.6.1"
   },
   "packageManager": "bun@1.2.23"

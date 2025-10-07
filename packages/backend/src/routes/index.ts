@@ -7,7 +7,7 @@ async function routes (
     fastify.get("/", async (_request, _reply) => {
         return "Hello World!\n";
     });
-    fastify.after
+    // fastify.after
 }
 
 export default routes;
