@@ -1,4 +1,4 @@
-import type { FastifyInstance, FastifyPluginOptions, FastifyRegisterOptions, FastifyServerOptions } from "fastify";
+import type { FastifyInstance, FastifyPluginOptions, FastifyRegisterOptions } from "fastify";
 
 async function routes (
     fastify:FastifyInstance,
@@ -7,6 +7,7 @@ async function routes (
     fastify.get("/", async (_request, _reply) => {
         return "Hello World!\n";
     });
+    fastify.after
 }
 
 export default routes;

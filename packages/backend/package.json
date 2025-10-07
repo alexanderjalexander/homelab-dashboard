@@ -5,15 +5,18 @@
   "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "start": "bun --env-file=./../../.env src/index.ts",
-    "dev": "bun --env-file=./../../.env --hot src/index.ts"
+    "start": "bun --env-file=./../../.env --env-file=./.env src/index.ts",
+    "dev": "bun --env-file=./../../.env --env-file=./.env --hot src/index.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"
   },
   "dependencies": {
-    "@fastify/env": "^5.0.3",
-    "fastify": "^4.28.1"
+    "@fastify/auth": "^5.0.3",
+    "@fastify/jwt": "^10.0.0",
+    "@fastify/leveldb": "^6.1.0",
+    "bcrypt": "^6.0.0",
+    "fastify": "^5.6.1"
   },
   "packageManager": "bun@1.2.23"
 }
