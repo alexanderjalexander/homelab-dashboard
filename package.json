@@ -1,6 +1,5 @@
 {
-  "name": "homelab-fastify",
-  "module": "index.ts",
+  "name": "homelab-dashboard",
   "private": true,
   "type": "module",
   "workspaces": [
