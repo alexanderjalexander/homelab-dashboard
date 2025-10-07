@@ -2,7 +2,8 @@
 
 This is meant to be a simple, personal dashboard for my little laptop homelab so I can manage some of my cool things at home.
 
-This was initially bootstrapped from
+Features
+- Single-admin authentication and login using cookie-based JWT
 
 ## Usage
 
@@ -12,6 +13,8 @@ First, install the dependencies:
 ```sh
 $ bun install
 ```
+
+Then, in the root of the repo, and each package, add `.env` files where necessary and follow the examples in `example.env`.
 
 Then run the server:
 ```sh
