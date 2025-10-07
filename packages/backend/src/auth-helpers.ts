@@ -18,14 +18,23 @@ const hashPassword = async (inputPassword: string) => {
 
 const verifyPassword = async (app:FastifyInstance, inputClearPassword: string) => {
     const hashedPassword:string = await app.level.authdb.get("ADMIN_HASHEDPASSWORD");
-    return await Bun.password.verify(inputClearPassword, hashedPassword, hash_algo);
+    const isPassword = await Bun.password.verify(inputClearPassword, hashedPassword, hash_algo);
+    return isPassword;
 };
 
 export const verifyJwt = async (request:FastifyRequest, reply:FastifyReply) => {
     try {
         await request.jwtVerify({ onlyCookie: true });
     } catch(err) {
-        reply.send(err);
+        reply.status(401).send(err);
+    }
+}
+
+export const removeJwt = async (_request:FastifyRequest, reply:FastifyReply) => {
+    try {
+        reply.clearCookie(cookie_name).send();
+    } catch(err) {
+        reply.status(500).send(err);
     }
 }
 
@@ -36,7 +45,7 @@ export async function setupAuth(app: FastifyInstance) {
         secret: process.env["JWT_SECRET"]!,
         cookie: {
             cookieName: cookie_name,
-            signed: true,
+            signed: false,
         },
         decode: { complete: true },
         sign: {
@@ -65,7 +74,7 @@ export async function setupAuth(app: FastifyInstance) {
             if (user !== storedUser) {
                 reply.status(401).send({"error": "Could not log in with those credentials"});
             }
-            if (!verifyPassword(app, password)) {
+            if (!(await verifyPassword(app, password))) {
                 reply.status(401).send({"error": "Could not log in with those credentials"})
             }
 
@@ -75,6 +84,7 @@ export async function setupAuth(app: FastifyInstance) {
 
             reply
                 .setCookie(cookie_name, token, {
+                    path: '/',
                     secure: true,
                     httpOnly: true,
                     sameSite: true,
@@ -84,6 +94,10 @@ export async function setupAuth(app: FastifyInstance) {
             reply.send(err);
         }
     })
+
+    app.get("/check-auth", verifyJwt);
+
+    app.get("/logout", {preHandler: verifyJwt}, removeJwt);
 
     delete (process.env["ADMIN_USERNAME"]);
     delete (process.env["ADMIN_PASSWORD"]);
