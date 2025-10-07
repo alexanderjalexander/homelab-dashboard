@@ -6,7 +6,9 @@ server.get("/ping", async (_request, _reply) => {
   return "pong\n";
 });
 
-server.listen({ port: 3000 }, (err, address) => {
+const port:number = Number(process.env["BACKEND_PORT"]!);
+
+server.listen({ port: port }, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(1);

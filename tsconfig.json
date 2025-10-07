@@ -13,6 +13,13 @@
       "bun-types"
     ],
 
+    // Path Resolutions
+    "baseUrl": ".",
+    "paths": {
+      "@homelab/backend/*": ["packages/backend/src/*"],
+      "": [""]
+    },
+
     // Bundler mode
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -28,5 +35,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noPropertyAccessFromIndexSignature": true
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
