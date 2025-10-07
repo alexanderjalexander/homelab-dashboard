@@ -3,6 +3,10 @@
   "workspaces": {
     "": {
       "name": "homelab-fastify",
+      "devDependencies": {
+        "@types/node": "^22.0.0",
+        "typescript": "^5.9.3",
+      },
     },
     "packages/backend": {
       "name": "backend",
@@ -12,10 +16,6 @@
       },
       "devDependencies": {
         "@types/bun": "latest",
-        "@types/node": "^22.0.0",
-      },
-      "peerDependencies": {
-        "typescript": "^5.5.4",
       },
     },
   },

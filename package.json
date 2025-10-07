@@ -6,6 +6,10 @@
   "workspaces": [
     "packages/*"
   ],
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.9.3"
+  },
   "scripts": {
     "build": "bun run --workspaces build",
     "start": "bun run --workspaces start",
