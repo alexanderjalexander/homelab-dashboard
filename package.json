@@ -3,21 +3,13 @@
   "module": "index.ts",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "start": "bun src/index.ts",
-    "start:watch": "bun --watch src/index.ts",
-    "dev": "bun --hot src/index.ts"
-  },
-  "devDependencies": {
-    "@types/bun": "latest",
-    "@types/node": "^22.0.0"
-  },
-  "peerDependencies": {
-    "typescript": "^5.5.4"
-  },
-  "dependencies": {
-    "@fastify/env": "^5.0.3",
-    "fastify": "^4.28.1"
+    "build": "bun run --workspaces build",
+    "start": "bun run --workspaces start",
+    "dev": "bun run --workspaces dev",
+    "clean": "rm -rf node_modules backend/node_modules bun.lockb backend/bun.lockb"
   }
 }
