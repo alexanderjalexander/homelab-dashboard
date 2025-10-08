@@ -1,4 +1,3 @@
-import auth from "@fastify/auth";
 import cookie from "@fastify/cookie";
 import jwt from "@fastify/jwt";
 import leveldb from "@fastify/leveldb";
@@ -6,7 +5,7 @@ import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 
 const cookie_name = "aj-homelab-cookie";
 const cookie_expire = "60m";
-const salt_rounds = 16;
+const salt_rounds = 12;
 const hash_algo = "bcrypt";
 
 const hashPassword = async (inputPassword: string) => {
@@ -39,7 +38,6 @@ export const removeJwt = async (_request:FastifyRequest, reply:FastifyReply) => 
 }
 
 export async function setupAuth(app: FastifyInstance) {
-    await app.register(auth);
     await app.register(cookie);
     await app.register(jwt, {
         secret: process.env["JWT_SECRET"]!,
