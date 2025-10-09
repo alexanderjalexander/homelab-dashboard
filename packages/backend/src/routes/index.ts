@@ -1,7 +1,7 @@
 import type { Express, Request, Response } from "express";
 
 const constructorMethod = (server:Express) => {
-  server.use('*', (_req:Request, res:Response) => {
+  server.use('/{*splat}', (_req:Request, res:Response) => {
     res.sendStatus(404);
   });
 };

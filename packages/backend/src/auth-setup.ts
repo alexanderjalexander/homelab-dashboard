@@ -9,6 +9,18 @@ import { MemoryLevel } from "memory-level";
 
 import type { Express, Request, Response } from "express";
 
+declare module "express-session" {
+  interface Session {
+    user: {
+        name: string,
+        user_agent: string,
+        from: string,
+        host: string,
+        authenticated: boolean,
+    },
+  }
+}
+
 const salt_rounds = 12;
 const admin_user_key = "ADMIN_USERNAME";
 const admin_pw_key = "ADMIN_PASSWORD";
@@ -59,25 +71,48 @@ export async function setupAuth(server: Express) {
                 response.status(401).send({"error": "Could not log in with those credentials"})
             }
 
-            // TODO: Redo this
+            request.session.user = {
+                name: user,
+                user_agent: request.headers["user-agent"]!,
+                from: request.headers["from"]!,
+                host: request.headers["host"]!,
+                authenticated: true,
+            };
+            response.status(200).json(request.session.user);
         } catch(err) {
             response.status(400).send(err);
         }
     }
 
-    const checkAuth = async (_request:Request, response:Response) => {
+    const checkAuth = async (request:Request, response:Response) => {
         try {
-            // TODO: Fix this
+            if (request.session.user) {
+                response.status(200).json(request.session.user);
+            } else {
+                response.status(401).json({error: "Not Logged In"});
+            }
         } catch(err) {
-            response.status(401).send(err);
+            response.status(401).json({error: err});
         }
     }
 
-    const logOut = async (_request:Request, response:Response) => {
+    const logOut = async (request:Request, response:Response) => {
         try {
-            // TODO: Fix this
+            if (request.session.user) {
+                request.session.destroy((err) => {
+                    if (err) {
+                        console.error(err);
+                        response.status(500).send('Error logging out');
+                    } else {
+                        response.send('Logged out');
+                    }
+                });
+            } else {
+                response.status(401).json({error: "Not Logged In"});
+            }
+
         } catch(err) {
-            response.status(500).send(err);
+            response.status(500).json({error: err});
         }
     }
 

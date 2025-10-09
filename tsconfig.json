@@ -14,11 +14,11 @@
     ],
 
     // Path Resolutions
-    "baseUrl": ".",
-    "paths": {
-      "@homelab/backend/*": ["packages/backend/src/*"],
-      "": [""]
-    },
+    // "baseUrl": ".",
+    // "paths": {
+    //   "@homelab/backend/*": ["packages/backend/src/*"],
+    //   "": [""]
+    // },
 
     // Bundler mode
     "moduleResolution": "bundler",
@@ -35,9 +35,5 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noPropertyAccessFromIndexSignature": false
-  },
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  }
 }
