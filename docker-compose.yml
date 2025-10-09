@@ -1,0 +1,25 @@
+services:
+  mongodb:
+    container_name: express-wol-mongodb
+    image: mongo:5.0.13
+    restart: on-failure
+    volumes:
+      - ./docker-data:/data/db
+    healthcheck:
+      test: echo 'db.stats().ok' | mongo localhost:27017/test --quiet
+      interval: 15s
+      timeout: 10s
+      retries: 15
+      start_period: 15s
+  backend:
+    container_name: express-wol-backend
+    build: packages/backend/.
+    env_file:
+      - path: packages/backend/.env
+        required: true
+    restart: on-failure
+    ports:
+      - "4000:4000"
+    depends_on:
+      mongodb:
+        condition: service_healthy

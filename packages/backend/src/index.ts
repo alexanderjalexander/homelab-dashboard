@@ -9,7 +9,7 @@ configRoutes(server);
 setupAuth(server);
 
 // Supplied by outermost environment file
-const port: number = Number(process.env["BACKEND_PORT"]!);
+const port: number = 4000;
 
 server.listen(port, () => {
   console.log("Server active!");

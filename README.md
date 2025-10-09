@@ -1,9 +1,10 @@
-# Homelab Dashboard
+# Express WakeOnLan
 
-This is meant to be a simple, personal dashboard for my little laptop homelab so I can manage some of my cool things at home.
+This is meant to be a simple, personal wake-on-lan utility for my little laptop homelab so I can turn things off and on.
 
 Features
 - Single-admin authentication and login using express-session.
+  - Admin and passwords created through a
 
 ## Usage
 

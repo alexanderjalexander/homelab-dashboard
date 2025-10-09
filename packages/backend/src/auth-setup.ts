@@ -43,6 +43,7 @@ export async function setupAuth(server: Express) {
         cookie: {maxAge: 1000*60*30} /* 30 minute cookie age */
     }));
 
+    // TODO: Switch to MongoDB Implementation
     let memory_db;
     try {
         memory_db = new MemoryLevel({ valueEncoding: 'json', errorIfExists: true });
@@ -51,8 +52,15 @@ export async function setupAuth(server: Express) {
         memory_db = server.get("memory_db");
     }
     await memory_db.put(admin_user_key, process.env[admin_user_key]!);
-    const hashed_pw = await hashPassword(process.env[admin_pw_key]!);
-    await memory_db.put(admin_hpw_key, hashed_pw);
+    if (process.env[admin_hpw_key]) {
+        await memory_db.put(admin_hpw_key, process.env[admin_hpw_key]!);
+    } else {
+        const hashed_pw = await hashPassword(process.env[admin_pw_key]!);
+        await memory_db.put(admin_hpw_key, hashed_pw);
+        process.env[admin_hpw_key] = hashed_pw
+        delete (process.env[admin_pw_key])
+    }
+
 
     const logIn = async (request:Request, response:Response) => {
         try {
@@ -121,8 +129,4 @@ export async function setupAuth(server: Express) {
     server.get("/check-auth", checkAuth);
 
     server.get("/logout", logOut);
-
-    delete (process.env[admin_user_key]);
-    delete (process.env[admin_pw_key]);
-    delete (process.env["SECRET"]);
 }

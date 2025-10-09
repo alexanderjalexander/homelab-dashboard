@@ -74,3 +74,5 @@ web_modules/
 
 # Auth DB LevelUp Storage
 **/.authdb/
+
+docker-data/

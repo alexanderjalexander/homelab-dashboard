@@ -13,6 +13,10 @@
     "build": "npm run --workspaces build",
     "start": "npm run --workspaces start",
     "dev": "npm run --workspaces dev",
-    "clean": "rm -rf node_modules backend/node_modules bun.lockb backend/bun.lockb && npm run --workspaces clean"
+    "clean": "rm -rf node_modules && npm run --workspaces clean",
+
+    "docker-compose-up": "docker compose up -d",
+    "docker-compose-stop": "docker compose stop",
+    "docker-compose-down": "docker compose down"
   }
 }
