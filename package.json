@@ -1,5 +1,5 @@
 {
-  "name": "homelab-dashboard",
+  "name": "express-wol",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -12,6 +12,7 @@
   "scripts": {
     "build": "npm run --workspaces build",
     "start": "npm run --workspaces start",
-    "clean": "rm -rf node_modules backend/node_modules bun.lockb backend/bun.lockb"
+    "dev": "npm run --workspaces dev",
+    "clean": "rm -rf node_modules backend/node_modules bun.lockb backend/bun.lockb && npm run --workspaces clean"
   }
 }

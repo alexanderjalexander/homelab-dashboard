@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "node --env-file=./../../.env --env-file=./.env .dist/index.js",
-    "dev": "npx tsx --env-file=./../../.env --env-file=./.env --watch src/index.ts"
+    "dev": "npx tsx --env-file=./../../.env --env-file=./.env --watch src/index.ts",
+    "clean": "rm -rf node_modules .dist"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
