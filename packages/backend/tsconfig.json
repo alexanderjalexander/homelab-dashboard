@@ -4,6 +4,7 @@
         "outDir": ".dist",
         "noEmit": false,
         "allowImportingTsExtensions": false,
+        "rewriteRelativeImportExtensions": true,
         "emitDeclarationOnly": false
     },
     "include": [

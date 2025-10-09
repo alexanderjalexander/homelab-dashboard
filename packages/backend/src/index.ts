@@ -1,6 +1,6 @@
 import express from "express";
-import { setupAuth } from "./auth-setup.js";
-import configRoutes from "./routes/index.js"
+import { setupAuth } from "./auth-setup.ts";
+import configRoutes from "./routes/index.ts"
 
 const server = express()
   .use(express.json());
