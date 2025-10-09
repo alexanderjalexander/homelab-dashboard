@@ -1,4 +1,22 @@
-import fastify from "fastify";
+import express from "express";
+import configRoutes from "./routes/index.ts";
+import { setupAuth } from "./auth-setup.ts";
+
+const server = express()
+  .use(express.json);
+
+configRoutes(server);
+setupAuth(server);
+
+// Supplied by outermost environment file
+const port: number = Number(process.env["BACKEND_PORT"]!);
+
+server.listen(port, () => {
+  console.log("Server active!");
+  console.log(`Routes running on http://localhost:${port}`)
+});
+
+/* import fastify from "fastify";
 import { setupAuth } from "./auth-helpers.ts";
 import routes from "./routes/index.ts"
 
@@ -34,3 +52,4 @@ server.listen({ port: port }, (err, address) => {
   }
   console.log(`Server listening at ${address}`);
 });
+*/

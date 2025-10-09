@@ -1,24 +1,22 @@
 {
   "name": "backend",
-  "module": "index.ts",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "start": "bun --env-file=./../../.env --env-file=./.env src/index.ts",
-    "dev": "bun --env-file=./../../.env --env-file=./.env --hot src/index.ts"
-  },
-  "devDependencies": {
-    "@types/bun": "latest"
+    "start": "npx tsx --env-file=./../../.env --env-file=./.env src/index.ts",
+    "dev": "npx tsx --env-file=./../../.env --env-file=./.env --watch src/index.ts"
   },
   "dependencies": {
-    "@fastify/auth": "^5.0.3",
-    "@fastify/cookie": "^11.0.2",
-    "@fastify/jwt": "^10.0.0",
-    "@fastify/leveldb": "^6.1.0",
-    "@types/bcrypt": "^6.0.0",
-    "@types/jsonwebtoken": "^9.0.10",
-    "fastify": "^5.6.1"
+    "bcrypt": "^6.0.0",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "memory-level": "^3.1.0"
   },
-  "packageManager": "bun@1.2.23"
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.3",
+    "@types/express-session": "^1.18.2",
+    "@types/node": "^24.7.0"
+  }
 }

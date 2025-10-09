@@ -1,13 +1,9 @@
-import type { FastifyInstance, FastifyPluginOptions, FastifyRegisterOptions } from "fastify";
+import type { Express, Request, Response } from "express";
 
-async function routes (
-    fastify:FastifyInstance,
-    _options:FastifyRegisterOptions<FastifyPluginOptions>|undefined
-) {
-    fastify.get("/", async (_request, _reply) => {
-        return "Hello World!\n";
-    });
-    // fastify.after
-}
+const constructorMethod = (server:Express) => {
+  server.use('*', (_req:Request, res:Response) => {
+    res.sendStatus(404);
+  });
+};
 
-export default routes;
+export default constructorMethod;

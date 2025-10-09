@@ -10,9 +10,8 @@
     "typescript": "^5.9.3"
   },
   "scripts": {
-    "build": "bun run --workspaces build",
-    "start": "bun run --workspaces start",
-    "dev": "bun run --workspaces dev",
+    "build": "npm run --workspaces build",
+    "start": "npm run --workspaces start",
     "clean": "rm -rf node_modules backend/node_modules bun.lockb backend/bun.lockb"
   }
 }
