@@ -1,38 +1,22 @@
-// import cookie from "@fastify/cookie";
-// import jwt from "@fastify/jwt";
-// import leveldb from "@fastify/leveldb";
-// import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-
-import * as bcrypt from "bcrypt";
 import session from "express-session";
-import { MemoryLevel } from "memory-level";
 
 import type { Express, Request, Response } from "express";
+import usersData from "./data/users.ts"
+import { users as usersCol } from "./config/mongoCollections.ts"
+import { ObjectId } from "mongodb";
+import { admin_hpw_key, admin_pw_key, admin_user_key } from "./helpers.ts";
 
 declare module "express-session" {
   interface Session {
     user: {
         name: string,
         user_agent: string,
-        from: string,
-        host: string,
+        from?: string,
+        host?: string,
         authenticated: boolean,
     },
   }
 }
-
-const salt_rounds = 12;
-const admin_user_key = "ADMIN_USERNAME";
-const admin_pw_key = "ADMIN_PASSWORD";
-const admin_hpw_key = "ADMIN_HASHEDPASSWORD";
-
-const hashPassword = async (inputPassword: string) => {
-    return await bcrypt.hash(inputPassword, salt_rounds);
-};
-
-const verifyPassword = async (inputClearPassword:string, hashedPassword:string) => {
-    return await bcrypt.compare(inputClearPassword, hashedPassword);
-};
 
 export async function setupAuth(server: Express) {
     server.use(session({
@@ -43,40 +27,43 @@ export async function setupAuth(server: Express) {
         cookie: {maxAge: 1000*60*30} /* 30 minute cookie age */
     }));
 
-    // TODO: Switch to MongoDB Implementation
-    let memory_db;
     try {
-        memory_db = new MemoryLevel({ valueEncoding: 'json', errorIfExists: true });
-        server.set("memory_db", memory_db);
+        await usersData.getUserByUsername(process.env[admin_user_key]!);
     } catch(_e) {
-        memory_db = server.get("memory_db");
+        if (process.env[admin_hpw_key] === undefined) {
+            const newUser = await usersData.createUser(process.env[admin_user_key]!, process.env[admin_pw_key]!, true);
+            process.env[admin_hpw_key] = newUser.hashedPassword;
+            delete (process.env[admin_pw_key]);
+        } else {
+            const usersCollection = await usersCol();
+            await usersCollection.findOneAndReplace(
+                {"username": process.env[admin_user_key]!},
+                {
+                    _id: new ObjectId(),
+                    username: process.env[admin_user_key]!,
+                    hashedPassword: process.env[admin_hpw_key],
+                    admin: true,
+                },
+            )
+        }
     }
-    await memory_db.put(admin_user_key, process.env[admin_user_key]!);
-    if (process.env[admin_hpw_key]) {
-        await memory_db.put(admin_hpw_key, process.env[admin_hpw_key]!);
-    } else {
-        const hashed_pw = await hashPassword(process.env[admin_pw_key]!);
-        await memory_db.put(admin_hpw_key, hashed_pw);
-        process.env[admin_hpw_key] = hashed_pw
-        delete (process.env[admin_pw_key])
-    }
-
 
     const logIn = async (request:Request, response:Response) => {
         try {
             const { user, password } = request.body;
-            if (!user || !password
-                || typeof(user) !== 'string' || typeof(password) !== 'string'
-                || user.trim().length < 1 || password.trim().length < 1) {
-                response.status(400).send({"error": "Must supply obj with {'user': '...', 'password': '...'}"})
+            if (!user
+                || !password
+                || typeof(user) !== 'string'
+                || typeof(password) !== 'string'
+                || user.trim().length < 1
+                || password.trim().length < 1) {
+                response.status(400).json({"error": "Must supply obj with {'user': '...', 'password': '...'}"});
             }
-            const storedUser = (await memory_db.get(admin_user_key))!;
-            const storedPassword = (await memory_db.get(admin_hpw_key))!;
-            if (user !== storedUser) {
-                response.status(401).send({"error": "Could not log in with those credentials"});
-            }
-            if (!(await verifyPassword(password, storedPassword))) {
-                response.status(401).send({"error": "Could not log in with those credentials"})
+            let storedUser;
+            try {
+                storedUser = await usersData.loginUser(user, password);
+            } catch(e) {
+                response.status(401).json({"error": "Could not log in with those credentials"});
             }
 
             request.session.user = {
@@ -88,7 +75,7 @@ export async function setupAuth(server: Express) {
             };
             response.status(200).json(request.session.user);
         } catch(err) {
-            response.status(400).send(err);
+            response.status(400).json({error: err});
         }
     }
 
@@ -110,9 +97,9 @@ export async function setupAuth(server: Express) {
                 request.session.destroy((err) => {
                     if (err) {
                         console.error(err);
-                        response.status(500).send('Error logging out');
+                        response.status(500).json({error: 'There was a problem logging out'});
                     } else {
-                        response.send('Logged out');
+                        response.sendStatus(200);
                     }
                 });
             } else {

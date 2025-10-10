@@ -5,10 +5,13 @@ import configRoutes from "./routes/index.ts"
 const server = express()
   .use(express.json());
 
+if (!process.env["ADMIN_USERNAME"] || !process.env["ADMIN_PASSWORD"]) {
+  throw new Error(".env variables for ADMIN_USERNAME, & ADMIN_PASSWORD, must be set!")
+}
+
 configRoutes(server);
 setupAuth(server);
 
-// Supplied by outermost environment file
 const port: number = 4000;
 
 server.listen(port, () => {
