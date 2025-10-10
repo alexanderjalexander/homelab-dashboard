@@ -67,7 +67,7 @@ export async function setupAuth(server: Express) {
             }
 
             request.session.user = {
-                name: user,
+                name: storedUser!.username,
                 user_agent: request.headers["user-agent"]!,
                 from: request.headers["from"]!,
                 host: request.headers["host"]!,

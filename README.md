@@ -2,6 +2,11 @@
 
 This is meant to be a simple, personal wake-on-lan utility for my little laptop homelab so I can turn things off and on.
 
+Technologies
+- Express.js & Express-Session
+- MongoDB
+- Docker
+
 Features
 - Single-admin authentication and login using express-session.
   - Admin and passwords created through a
