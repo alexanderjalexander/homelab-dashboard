@@ -75,4 +75,9 @@ web_modules/
 # Auth DB LevelUp Storage
 **/.authdb/
 
+# Docker DB Data
 docker-data/
+
+# React Router
+.react-router/
+build/

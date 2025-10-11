@@ -11,6 +11,6 @@ RUN npm run build
 # HEALTHCHECK --interval=10s --timeout=10s --start-period=10s --retries=3 \
 #     CMD curl -fs "http://localhost:4000/api/health"
 
-EXPOSE ${BACKEND_PORT}
+EXPOSE 4000
 
 CMD ["npm", "start"]
