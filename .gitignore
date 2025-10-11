@@ -72,12 +72,30 @@ web_modules/
 # Finder (MacOS) folder config
 .DS_Store
 
-# Auth DB LevelUp Storage
-**/.authdb/
-
 # Docker DB Data
 docker-data/
 
-# React Router
-.react-router/
-build/
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
